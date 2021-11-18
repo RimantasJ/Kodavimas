@@ -4,15 +4,8 @@
 #include "head.h"
 
 using namespace std;
-void hi(string name){
-
-  cout << "Hello " << name << endl;
-  
-  return;
-}
 
 void printMatrix(int** M, int rows, int cols){
-
   for(int i = 0; i < rows; i++){
     for(int j = 0; j < cols; j++){
       cout << M[i][j] << " ";
@@ -21,17 +14,15 @@ void printMatrix(int** M, int rows, int cols){
   }
 }
 
+// Recurrent function
 void createGeneratingMatrix(int** G, int m){
-
   int rows = m+1;
   int cols = pow(2, m);
   int duplicate_j;
 
-
   if(m > 1){
     // quarter 1
     createGeneratingMatrix(G, m-1);
-    
     // quarter 2
     for(int i = 0; i < m; i++){
       for(int j = 0; j < cols / 2; j++){
@@ -39,17 +30,14 @@ void createGeneratingMatrix(int** G, int m){
         G[i][duplicate_j] = G[i][j];
       }
     }
-
     // quarter 3
     for(int i = 0; i < cols / 2; i++){
       G[m][i] = 0;
     }
-
     // quarter 4
     for(int i = cols / 2; i < cols; i++){
       G[m][i] = 1;
     }
-
   } else if(m = 1){
     G[0][0] = 1;
     G[0][1] = 1;
@@ -58,5 +46,24 @@ void createGeneratingMatrix(int** G, int m){
   } else{
     return;
   }
-
 }
+
+void mulMatrixes(int** A, int arows, int acols, int** B, int brows, int bcols, int** R){
+  if(acols != brows){
+    cout << "matrix cannot be multiplied" << endl;
+    return;
+  }
+
+  int cell_sum = 0;
+  for(int i = 0; i < arows; i++){
+    for(int j = 0; j < bcols; j++){
+      for(int k = 0; k < brows; k++){
+         cell_sum += A[i][k] * B[k][j];
+      }
+      R[i][j] = cell_sum;
+      cell_sum = 0;
+    }
+  }
+}
+
+
