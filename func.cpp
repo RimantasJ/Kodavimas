@@ -175,4 +175,32 @@ void encode(int m, string input_file_name) {
   delete[] G;
 }
 
+void createIdentityMatrix(int** I, int size) {
+  I = new int*[size];
+  for(int i = 0; i < size; i++){
+    I[i] = new int[size];
+  }
+  
+  for (int i = 0; i < size; i++) {
+    for (int j = 0; j < i; j++) {
+      I[i][j] = 0;
+      I[j][i] = 0;
+    }
+    I[i][i] = 1;
+  }
+}
+
+// void kronecherMatrixesProduct(int** A, int arows, int acols, int** B, int brows, int bcols, int** R) {
+//   for (int  i = 0; i < arows; i++) {
+//     for (int j = 0; j < acols; j++) {
+
+//     }
+//   }
+// }
+
+// void decode(int m, string sent_file_name) {
+
+// }
+
+
 
