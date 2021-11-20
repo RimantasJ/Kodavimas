@@ -171,7 +171,7 @@ void encode(int m, string input_file_name) {
     // Encode segment
     mulMatrixes(input_buffer, m+1, G, m+1, two_m, encoded_buffer);
 
-    // Write
+    // Write MIGHT NEED A TWEEK
     for (int  i = 0; i < two_m; i++) {
       tmp = to_string(encoded_buffer[i]);
       for (int j = 0; j < tmp.length(); j++) {
@@ -208,11 +208,11 @@ int** createIdentityMatrix(int size) {
   return I;
 }
 
-void deleteIdentityMatrix(int** I, int size) {
-  for(int i = 0; i < size; i++){
-    delete(I[i]);
+void delete2DMatrix(int** A, int rows) {
+  for(int i = 0; i < rows; i++){
+    delete(A[i]);
   }
-  delete(I);
+  delete(A);
 }
 
 void kronecherMatrixesProduct(int** A, int asize, int** B, int bsize, int** R) {
@@ -257,25 +257,17 @@ int*** createHadamarMatrixes(int m) {
     I_size = pow(2, m-i);
     I = createIdentityMatrix(I_size);
     kronecherMatrixesProduct(I, I_size, H_base, 2, H_tmp);
-    deleteIdentityMatrix(I, I_size);
+    delete2DMatrix(I, I_size);
 
     H_size = I_size * 2;
     I_size = pow(2, i-1);
     I = createIdentityMatrix(I_size);
     kronecherMatrixesProduct(H_tmp, H_size, I, I_size, H[i-1]);
-    deleteIdentityMatrix(I, I_size);
-
+    delete2DMatrix(I, I_size);
   }
 
-  for(int i = 0; i < two_m; i++){
-    delete(H_tmp[i]);
-  }
-  delete(H_tmp);
-
-  delete(H_base[0]);
-  delete(H_base[1]);
-  delete(H_base);
-
+  delete2DMatrix(H_tmp, two_m);
+  delete2DMatrix(H_base, 2);
 
   return H;
 }
