@@ -208,12 +208,48 @@ int** createIdentityMatrix(int size) {
   return I;
 }
 
-// void kronecherMatrixesProduct(int** A, int arows, int acols, int** B, int brows, int bcols, int** R) {
-//   for (int  i = 0; i < arows; i++) {
-//     for (int j = 0; j < acols; j++) {
+void kronecherMatrixesProduct(int** A, int arows, int acols, int** B, int brows, int bcols, int** R) {
+  for (int  i = 0; i < arows; i++) {
+    for (int j = 0; j < acols; j++) {
+      for (int k = 0; k < brows; k++) {
+        for (int u = 0; u < bcols; u++) {
+          R[i*brows+k][j*bcols+u] = A[i][j] * B[k][u];
+        }
+      }
+    }
+  }
+}
 
+// int*** createHadamarMatrixes(int m) {
+//   int two_m = pow(2, m);
+  
+//   int*** H = new int**[m];
+//   for (int i = 0; i < two_m; i++) {
+//     H[i] = new int*[two_m];
+//     for (int j = 0; j < two_m; j++) {
+//       H[i][j] = new int[two_m];
 //     }
 //   }
+
+//   for (int i = 0; i < m; i++) {
+//     for (int j = 0; j < two_m; j++) {
+//       for (int k = 0; k < two_m; k++) {
+//         H[i][j][k] = i*100+j*10+k;
+//       }
+//     }
+//   }
+
+//   for (int i = 0; i < m; i++) {
+//     for (int j = 0; j < two_m; j++) {
+//       for (int k = 0; k < two_m; k++) {
+//         cout << H[i][j][k] << " ";
+//       }
+//       cout << endl;
+//     }
+//     cout << endl;
+//   }
+
+
 // }
 
 // void decode(int m, string sent_file_name) {

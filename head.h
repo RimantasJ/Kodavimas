@@ -13,3 +13,7 @@ void mulMatrixes(int** A, int arows, int acols, int** B, int brows, int bcols, i
 void mulMatrixes(int* A, int acols, int** B, int brows, int bcols, int* R);
 
 void encode(int m, string input_file_name);
+
+int** createIdentityMatrix(int size);
+
+void kronecherMatrixesProduct(int** A, int arows, int acols, int** B, int brows, int bcols, int** R);
