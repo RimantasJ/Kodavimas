@@ -208,53 +208,77 @@ int** createIdentityMatrix(int size) {
   return I;
 }
 
-void kronecherMatrixesProduct(int** A, int arows, int acols, int** B, int brows, int bcols, int** R) {
-  for (int  i = 0; i < arows; i++) {
-    for (int j = 0; j < acols; j++) {
-      for (int k = 0; k < brows; k++) {
-        for (int u = 0; u < bcols; u++) {
-          R[i*brows+k][j*bcols+u] = A[i][j] * B[k][u];
+void deleteIdentityMatrix(int** I, int size) {
+  for(int i = 0; i < size; i++){
+    delete(I[i]);
+  }
+  delete(I);
+}
+
+void kronecherMatrixesProduct(int** A, int asize, int** B, int bsize, int** R) {
+  for (int  i = 0; i < asize; i++) {
+    for (int j = 0; j < asize; j++) {
+      for (int k = 0; k < bsize; k++) {
+        for (int u = 0; u < bsize; u++) {
+          R[i*bsize+k][j*bsize+u] = A[i][j] * B[k][u];
         }
       }
     }
   }
 }
 
-// int*** createHadamarMatrixes(int m) {
-//   int two_m = pow(2, m);
+int*** createHadamarMatrixes(int m) {
+  int two_m = pow(2, m);
+
+  int** H_base = new int*[2];
+  H_base[1] = new int[2];
+  H_base[0] = new int[2];
+  H_base[0][0] = 1; H_base[0][1] = 1;
+  H_base[1][0] = 1; H_base[1][1] = -1;
   
-//   int*** H = new int**[m];
-//   for (int i = 0; i < two_m; i++) {
-//     H[i] = new int*[two_m];
-//     for (int j = 0; j < two_m; j++) {
-//       H[i][j] = new int[two_m];
-//     }
-//   }
+  int** H_tmp = new int*[two_m];
+  for(int i = 0; i < two_m; i++){
+    H_tmp[i] = new int[two_m];
+  }
 
-//   for (int i = 0; i < m; i++) {
-//     for (int j = 0; j < two_m; j++) {
-//       for (int k = 0; k < two_m; k++) {
-//         H[i][j][k] = i*100+j*10+k;
-//       }
-//     }
-//   }
+  int*** H = new int**[m];
+  for (int i = 0; i < m; i++) {
+    H[i] = new int*[two_m];
+    for (int j = 0; j < two_m; j++) {
+      H[i][j] = new int[two_m];
+    }
+  }
 
-//   for (int i = 0; i < m; i++) {
-//     for (int j = 0; j < two_m; j++) {
-//       for (int k = 0; k < two_m; k++) {
-//         cout << H[i][j][k] << " ";
-//       }
-//       cout << endl;
-//     }
-//     cout << endl;
-//   }
+  int** I;
+  int I_size;
+  int H_size;
+
+  for (int i = 1; i <= m; i++) {
+    I_size = pow(2, m-i);
+    I = createIdentityMatrix(I_size);
+    kronecherMatrixesProduct(I, I_size, H_base, 2, H_tmp);
+    deleteIdentityMatrix(I, I_size);
+
+    H_size = I_size * 2;
+    I_size = pow(2, i-1);
+    I = createIdentityMatrix(I_size);
+    kronecherMatrixesProduct(H_tmp, H_size, I, I_size, H[i-1]);
+    deleteIdentityMatrix(I, I_size);
+
+  }
+
+  for(int i = 0; i < two_m; i++){
+    delete(H_tmp[i]);
+  }
+  delete(H_tmp);
+
+  delete(H_base[0]);
+  delete(H_base[1]);
+  delete(H_base);
 
 
-// }
-
-// void decode(int m, string sent_file_name) {
-
-// }
+  return H;
+}
 
 
 

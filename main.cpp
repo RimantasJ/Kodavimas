@@ -44,7 +44,9 @@ int main() {
   // cout << "R: " << endl;
   // printMatrix(R, 4, 4);
 
+  int*** H;
 
+  H = createHadamarMatrixes(3);
 
 
   system("pause");

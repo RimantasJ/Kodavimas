@@ -16,4 +16,6 @@ void encode(int m, string input_file_name);
 
 int** createIdentityMatrix(int size);
 
-void kronecherMatrixesProduct(int** A, int arows, int acols, int** B, int brows, int bcols, int** R);
+void kronecherMatrixesProduct(int** A, int asize,int** B, int size, int** R);
+
+int*** createHadamarMatrixes(int m);
