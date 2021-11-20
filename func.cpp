@@ -167,7 +167,7 @@ void encode(int m, string input_file_name) {
         extra_bits++;
       }
     }
-    
+
     // Encode segment
     mulMatrixes(input_buffer, m+1, G, m+1, two_m, encoded_buffer);
 
@@ -192,8 +192,8 @@ void encode(int m, string input_file_name) {
   delete[] G;
 }
 
-void createIdentityMatrix(int** I, int size) {
-  I = new int*[size];
+int** createIdentityMatrix(int size) {
+  int** I = new int*[size];
   for(int i = 0; i < size; i++){
     I[i] = new int[size];
   }
@@ -205,6 +205,7 @@ void createIdentityMatrix(int** I, int size) {
     }
     I[i][i] = 1;
   }
+  return I;
 }
 
 // void kronecherMatrixesProduct(int** A, int arows, int acols, int** B, int brows, int bcols, int** R) {
