@@ -25,37 +25,54 @@ void printMatrix(int* M, int cols) {
 }
 
 // Recurrent function
-void createGeneratingMatrix(int** G, int m) {
+
+void generateGeneratingMatrix(int** G, int m) {
+  cout << "iteration " << m << endl;
   int rows = m+1;
   int cols = pow(2, m);
   int duplicate_j;
 
-  if(m > 1){
+  if (m > 1) {
     // quarter 1
-    createGeneratingMatrix(G, m-1);
+    generateGeneratingMatrix(G, m-1);
     // quarter 2
     for(int i = 0; i < m; i++){
-      for(int j = 0; j < cols / 2; j++){
+      for(int j = 0; j < cols / 2; j++) {
         duplicate_j = j + cols / 2;
         G[i][duplicate_j] = G[i][j];
       }
     }
     // quarter 3
-    for(int i = 0; i < cols / 2; i++){
+    for(int i = 0; i < cols / 2; i++) {
       G[m][i] = 0;
     }
     // quarter 4
-    for(int i = cols / 2; i < cols; i++){
+    for (int i = cols / 2; i < cols; i++) {
       G[m][i] = 1;
     }
-  } else if(m = 1){
+  } else if(m = 1) {
     G[0][0] = 1;
     G[0][1] = 1;
     G[1][0] = 0;
     G[1][1] = 1;
-  } else{
+
+    printMatrix(G, 2, 2);
+  } else {
     return;
   }
+}
+int** createGeneratingMatrix(int m) {
+  int rows = m+1;
+  int cols = pow(2, m);
+  int** G = new int*[rows];
+  for(int i = 0; i < rows; i++){
+    G[i] = new int[cols];
+  }
+
+  generateGeneratingMatrix(G, m);
+  printMatrix(G, rows, cols);
+  cout << "G00: " << G[0][0] << " num" << endl;
+  return G;
 }
 
 // if left matrix is two dimensional (one or more rows)
@@ -96,16 +113,22 @@ void mulMatrixes(int* A, int acols, int** B, int brows, int bcols, int* R) {
 
 void encode(int m, string input_file_name) {
 
-  int two_m = two_m = pow(2, m);
+  int two_m = pow(2, m);
+  
+  int** G;
 
   // Creating the generating matrix
-  int rows = m+1;
-  int cols = pow(2, m);
-  int** G = new int*[rows];
-  for(int i = 0; i < rows; i++){
-    G[i] = new int[cols];
+  
+  G = createGeneratingMatrix(m);
+
+  if (G == NULL) {
+    cout << "Generating matrix is null" << endl;
   }
-  createGeneratingMatrix(G, m);
+
+  cout << "G00: " << G[0][0] << " val" << endl;;
+
+  cout << "generating matrix" << endl;
+  printMatrix(G, m+1, two_m);
   
   // getting input
   char char_buffer = 0;
@@ -132,9 +155,21 @@ void encode(int m, string input_file_name) {
   while (!eof_flag) {
 
     // Read
-    for (int i = 0; i < m+1;) {
+    char_buffer = getc(input_file);
+    if (!feof(input_file)) {
+      if (char_buffer == '1') {
+        input_buffer[0] = 1;
+      } else if (char_buffer == '0') {
+        input_buffer[0] = 0;
+      }
+    } else {
+      break;
+    }
+
+    for (int i = 1; i < m+1;) {
       if (!feof(input_file)) {
         char_buffer = getc(input_file);
+        printf("ch %c %d\n", char_buffer, char_buffer);
         if (char_buffer == '1') {
           input_buffer[i] = 1;
           i++;
@@ -149,7 +184,7 @@ void encode(int m, string input_file_name) {
         extra_bits++;
       }
     }
-
+    cout << endl;
     // Encode segment
     mulMatrixes(input_buffer, m+1, G, m+1, two_m, encoded_buffer);
 
@@ -159,7 +194,6 @@ void encode(int m, string input_file_name) {
       for (int j = 0; j < tmp.length(); j++) {
         putc(tmp[j], encoded_file);
       }
-      
     }
   }
 
